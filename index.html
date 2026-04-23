@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>阿明的歲月筆記 - 港城變遷與歷史見證</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&family=Zhi+Mang+Xing&display=swap');
-
+        /* 改用跨平台的標準系統字體，避免缺字或字體不統一的問題 */
         :root {
+            --font-sans: "PingFang TC", "Heiti TC", "Microsoft JhengHei", "微軟正黑體", sans-serif;
+            --font-serif: "PMingLiU", "MingLiU", "新細明體", "Times New Roman", serif;
+            
             --bg-color: #F2EBE1; 
             --text-main: #3E3832; 
             --text-light: #6B6255;
@@ -20,7 +22,7 @@
             --shadow: 0 10px 30px rgba(42, 75, 107, 0.08);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans TC', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-sans); }
         body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.8; 
                background-image: radial-gradient(#d5cbb8 1px, transparent 1px); background-size: 20px 20px; }
 
@@ -29,7 +31,7 @@
             justify-content: space-between; align-items: center; background: rgba(242, 235, 225, 0.95);
             backdrop-filter: blur(5px); z-index: 100; border-bottom: 2px solid var(--accent-blue);
         }
-        .logo { font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 1.4rem; color: var(--accent-blue); letter-spacing: 2px;}
+        .logo { font-family: var(--font-serif); font-weight: 700; font-size: 1.4rem; color: var(--accent-blue); letter-spacing: 2px;}
         .nav-btn { background: var(--accent-blue); color: #F2EBE1; border: none; padding: 8px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
         .nav-btn:hover { background: var(--accent-blue-hover); transform: translateY(-2px); }
 
@@ -38,20 +40,20 @@
         .section.visible { opacity: 1; transform: translateY(0); }
         .section.locked { display: none; }
 
-        h1, h2, h3 { font-family: 'Noto Serif TC', serif; }
+        h1, h2, h3 { font-family: var(--font-serif); }
         h1 { font-size: 2.5rem; color: var(--accent-blue); text-align: center; margin-bottom: 10px; }
-        h1 span { color: var(--accent-red); font-family: 'Zhi Mang Xing', cursive; font-size: 3.5rem; display: inline-block; transform: translateY(5px); margin-left: 10px;}
+        h1 span { color: var(--accent-red); font-family: var(--font-sans); font-weight: bold; font-size: 2.2rem; display: inline-block; transform: translateY(0px); margin-left: 10px;}
         
         /* 日記本與文物樣式 */
         .diary-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 8px; padding: 40px; box-shadow: var(--shadow); position: relative; margin-top: 20px; }
         .diary-card::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: rgba(163, 59, 46, 0.3); }
-        .diary-date { font-family: 'Zhi Mang Xing', cursive; font-size: 2rem; color: var(--accent-blue); margin-bottom: 15px; border-bottom: 1px solid rgba(42, 75, 107, 0.2); padding-bottom: 5px; }
-        .diary-text { font-size: 1.15rem; color: var(--text-main); margin-bottom: 25px; text-indent: 2em; line-height: 2; font-family: 'Noto Serif TC', serif; }
+        .diary-date { font-family: var(--font-serif); font-weight: bold; font-size: 1.6rem; color: var(--accent-blue); margin-bottom: 15px; border-bottom: 1px solid rgba(42, 75, 107, 0.2); padding-bottom: 5px; }
+        .diary-text { font-size: 1.15rem; color: var(--text-main); margin-bottom: 25px; text-indent: 2em; line-height: 2; font-family: var(--font-serif); }
 
         /* 圖片與文物展示框 */
         .img-frame { width: 100%; max-width: 600px; margin: 0 auto 20px; border: 8px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transform: rotate(-1deg); overflow: hidden; }
         .img-frame img { width: 100%; display: block; height: auto; }
-        .artifact { background: #fffdf2; border: 1px solid #ddd; padding: 15px; margin: 20px 0; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); font-family: 'Noto Serif TC', serif; }
+        .artifact { background: #fffdf2; border: 1px solid #ddd; padding: 15px; margin: 20px 0; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); font-family: var(--font-serif); }
         .news-header { border-bottom: 2px solid #000; text-align: center; font-weight: bold; font-size: 1.4rem; margin-bottom: 10px; color: #000; }
         .ad-box { border: 2px dashed #555; padding: 15px; background: #fff; text-align: center; }
 
@@ -62,10 +64,10 @@
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 
         .question-box { background: rgba(42, 75, 107, 0.05); padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid rgba(42, 75, 107, 0.1); }
-        .question-box h4 { font-size: 1.15rem; color: var(--accent-blue); margin-bottom: 15px; }
+        .question-box h4 { font-size: 1.15rem; color: var(--accent-blue); margin-bottom: 15px; font-weight: bold; }
 
         .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .opt-btn { background: white; border: 1px solid #CCC; padding: 15px 20px; border-radius: 8px; font-size: 1.1rem; color: var(--text-main); cursor: pointer; transition: all 0.2s; text-align: left; line-height: 1.4; }
+        .opt-btn { background: white; border: 1px solid #CCC; padding: 15px 20px; border-radius: 8px; font-size: 1.1rem; color: var(--text-main); cursor: pointer; transition: all 0.2s; text-align: left; line-height: 1.4; font-weight: bold;}
         .opt-btn:hover { border-color: var(--accent-blue); background: rgba(42, 75, 107, 0.05); }
         .opt-btn.correct { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         .opt-btn.wrong { background: #9E9E9E; color: white; border-color: #9E9E9E; opacity: 0.8; }
@@ -76,7 +78,7 @@
         .step-feedback.show-wrong { display: block; background: rgba(163, 59, 46, 0.1); color: var(--accent-red); border-left: 4px solid var(--accent-red); }
 
         .unlock-container { text-align: center; margin-top: 30px; display: none; animation: slideIn 0.5s ease forwards; }
-        .next-section-btn { display: inline-block; padding: 12px 30px; background: var(--accent-red); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s; font-family: 'Noto Serif TC', serif; font-weight: bold; }
+        .next-section-btn { display: inline-block; padding: 12px 30px; background: var(--accent-red); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s; font-family: var(--font-serif); font-weight: bold; }
         .next-section-btn:hover { background: var(--accent-red-hover); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(163, 59, 46, 0.3); }
 
         /* 老照片卡片 (加入圖片支援) */
@@ -88,7 +90,7 @@
         .photo-card .img-placeholder { height: 140px; background: #eee; border: 1px solid #ccc; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #999; overflow: hidden; }
         .photo-card .img-placeholder img { width: 100%; height: 100%; object-fit: cover; transition: 0.3s; }
         
-        .photo-card p.caption { font-family: 'Zhi Mang Xing', cursive; font-size: 1.4rem; color: var(--text-main); margin: 0; }
+        .photo-card p.caption { font-family: var(--font-serif); font-weight: bold; font-size: 1.4rem; color: var(--text-main); margin: 0; }
         .photo-card .back-desc { display: none; margin-top: 10px; font-size: 0.95rem; text-align: left; color: var(--accent-blue); border-top: 1px dashed #ccc; padding-top: 10px; }
         .photo-card.revealed .back-desc { display: block; animation: slideIn 0.3s ease; }
         .photo-card.revealed .img-placeholder { opacity: 0.3; height: 60px; transition: 0.3s; }
@@ -97,14 +99,14 @@
         .stamp-game { text-align: center; border: 2px dashed var(--accent-red); padding: 20px; background: rgba(163, 59, 46, 0.05); border-radius: 8px; margin-top: 20px; }
         .pig-item { font-size: 3.5rem; display: inline-block; position: relative; margin: 10px 20px; cursor: pointer; transition: transform 0.2s; }
         .pig-item:hover { transform: scale(1.1); }
-        .seal-mark { position: absolute; top: 10px; left: -10px; color: var(--accent-red); font-size: 1.8rem; font-family: 'Zhi Mang Xing', cursive; transform: rotate(-20px); font-weight: bold; opacity: 0; pointer-events: none; border: 3px solid var(--accent-red); border-radius: 5px; padding: 2px 5px; }
+        .seal-mark { position: absolute; top: 10px; left: -10px; color: var(--accent-red); font-size: 1.8rem; font-family: var(--font-serif); transform: rotate(-20px); font-weight: bold; opacity: 0; pointer-events: none; border: 3px solid var(--accent-red); border-radius: 5px; padding: 2px 5px; }
         .seal-mark.stamped { opacity: 0.85; animation: stampDown 0.3s ease-in; }
         @keyframes stampDown { 0% { transform: scale(3) rotate(0deg); opacity: 0; } 100% { transform: scale(1) rotate(-20px); opacity: 0.85; } }
 
         /* 炸彈警示 */
         .bomb-box { background: #2c3e50; color: #fff; padding: 30px; text-align: center; border-radius: 8px; position: relative; margin-top: 20px; border: 4px solid #34495e; }
-        .bomb-text { color: #e74c3c; font-family: 'Zhi Mang Xing', cursive; font-size: 2.5rem; border: 3px solid #e74c3c; padding: 10px 20px; display: inline-block; margin-bottom: 20px; background: #fff; letter-spacing: 5px; }
-        .bomb-btn { padding: 12px 20px; border: none; border-radius: 4px; font-size: 1.1rem; cursor: pointer; font-weight: bold; margin: 10px; transition: 0.3s; }
+        .bomb-text { color: #e74c3c; font-family: var(--font-serif); font-weight: bold; font-size: 2.5rem; border: 3px solid #e74c3c; padding: 10px 20px; display: inline-block; margin-bottom: 20px; background: #fff; letter-spacing: 5px; }
+        .bomb-btn { padding: 12px 20px; border: none; border-radius: 4px; font-size: 1.1rem; cursor: pointer; font-weight: bold; margin: 10px; transition: 0.3s; font-family: var(--font-sans);}
         .bomb-danger { background: #e74c3c; color: white; }
         .bomb-danger:hover { background: #c0392b; }
         .bomb-safe { background: #95a5a6; color: white; }
@@ -112,17 +114,17 @@
 
         /* 小測系統 */
         .quiz-container { display: flex; gap: 30px; align-items: flex-start; padding-left: 20px; }
-        .quiz-text-area { flex: 2; line-height: 2.4; font-size: 1.15rem; font-family: 'Noto Serif TC', serif; }
+        .quiz-text-area { flex: 2; line-height: 2.4; font-size: 1.15rem; font-family: var(--font-serif); }
         .quiz-bank-area { flex: 1; position: sticky; top: 100px; background: white; padding: 20px; border-radius: 8px; box-shadow: var(--shadow); border: 1px solid var(--glass-border); }
-        .blank-slot { display: inline-block; min-width: 80px; height: 32px; padding: 0 10px; border-bottom: 2px solid var(--text-light); margin: 0 4px; text-align: center; font-weight: bold; color: var(--accent-red); background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; }
+        .blank-slot { display: inline-block; min-width: 80px; height: 32px; padding: 0 10px; border-bottom: 2px solid var(--text-light); margin: 0 4px; text-align: center; font-weight: bold; color: var(--accent-red); background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; font-family: var(--font-sans);}
         .blank-slot:hover { background: rgba(163, 59, 46, 0.1); border-color: var(--accent-red); }
         .blank-slot.filled { border-bottom: 2px solid var(--accent-red); background: transparent; }
         .blank-slot.correct { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(42, 75, 107, 0.1); }
         .blank-slot.wrong { border-color: var(--accent-red); color: var(--accent-red); background: rgba(163, 59, 46, 0.1); }
-        .word-chip { display: inline-block; background: var(--bg-color); border: 1px solid #ccd1d1; padding: 6px 12px; margin: 5px; border-radius: 4px; cursor: pointer; font-size: 1rem; color: var(--text-main); transition: all 0.2s; }
+        .word-chip { display: inline-block; background: var(--bg-color); border: 1px solid #ccd1d1; padding: 6px 12px; margin: 5px; border-radius: 4px; cursor: pointer; font-size: 1rem; color: var(--text-main); transition: all 0.2s; font-weight: bold;}
         .word-chip:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         .word-chip.hidden { display: none; }
-        .submit-btn { display: block; width: 100%; margin-top: 20px; background: var(--accent-red); color: white; padding: 10px; border-radius: 4px; font-size: 1.1rem; font-weight: bold; border: none; cursor: pointer; transition: background 0.3s; }
+        .submit-btn { display: block; width: 100%; margin-top: 20px; background: var(--accent-red); color: white; padding: 10px; border-radius: 4px; font-size: 1.1rem; font-weight: bold; border: none; cursor: pointer; transition: background 0.3s; font-family: var(--font-sans);}
         .submit-btn:hover { background: var(--accent-red-hover); }
         #quiz-result { margin-top: 25px; padding: 15px; border-radius: 4px; text-align: center; display: none; animation: slideIn 0.5s ease; }
         .result-perfect { background: rgba(212, 175, 55, 0.15); border: 1px solid #D4AF37; color: #9A7B1E; }
@@ -139,10 +141,64 @@
     </nav>
 
     <div class="container">
-        
-        <div class="section visible" id="sec-intro">
+
+        <div class="section visible" id="sec-immigration">
             <h1>阿明的歲月筆記 <span>建國以來的港城變遷</span></h1>
             
+            <div class="diary-card">
+                <div class="diary-date">1950年11月10日 星期五 秋風起</div>
+                
+                <div class="img-frame"><img src="immigrant_1950s.jpg" alt="逃避戰亂的難民潮" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'200\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%23999\'%3E[圖片載入處: immigrant_1950s.jpg]%3C/text%3E%3C/svg%3E'"></div>
+                
+                <div class="artifact">
+                    <div class="news-header">時代背景：動盪與南移</div>
+                    <p style="text-align:center;">二次大戰後，英國恢復對香港的殖民管治。然而好景不常，內地局勢再次牽動無數家庭的命運。</p>
+                </div>
+
+                <div class="diary-text">
+                    終於在香港安頓下來了。回想幾年前（1946年），內地戰火連天，為了逃避戰亂，我們一家和很多鄉里一樣，收拾行囊匆匆南移來到這裡。街上到處都是和我們一樣的異鄉人，有工人、商人，也有知識份子。聽說最近（1949年後）內地又有很多變故，越來越多的人不顧一切地越過邊界。這座小小的城市，不知道還能容下多少人？
+                </div>
+                
+                <div class="chain-step active" id="step-0-1">
+                    <div class="question-box">
+                        <h4>第一層推論：阿明一家在1946年左右逃難來到香港，當時內地發生了什麼重大歷史事件？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-0-1', true, 'step-0-2', '正確！1946年國共內戰爆發，大量內地人民為逃避戰亂南移香港。')">A. 爆發了國共內戰</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-0-1', false)">B. 推行了改革開放</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="chain-step" id="step-0-2">
+                    <div class="question-box">
+                        <h4>第二層推論：到了1950至60年代，香港人口在十年間急劇上升了100萬。這次龐大「偷渡潮」的主要原因是什麼？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-0-2', false)">A. 內地鼓勵市民出國旅遊探親</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-0-2', true, 'step-0-3', '沒錯！新中國成立後實行連串政治運動，加上天災和饑荒，導致大量人口非法偷渡來港求生。')">B. 內地發生連串政治運動，加上天災和饑荒</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="chain-step" id="step-0-3">
+                    <div class="question-box">
+                        <h4>第三層推論：面對洶湧的偷渡潮，香港政府在1974年實施了什麼政策意圖遏止，最終卻因無效而在1980年取消並改為「即捕即解」？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-0-3', true, 'btn-unlock-1', '完全正確！當時實施「抵壘政策」（偷渡者若成功抵達市區即可登記身分），但未能遏止偷渡，最終只能改為一經捕獲即遣返的「即捕即解」政策。')">A. 「抵壘政策」</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-0-3', false)">B. 「輸入外地勞工計劃」</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="unlock-container" id="btn-unlock-1">
+                    <button class="next-section-btn" onclick="unlockSection('sec-intro')">翻開下一頁：寮屋與大火 (1953) ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section locked" id="sec-intro">
             <div class="diary-card">
                 <div class="diary-date">1953年12月25日 星期五 晴，極冷</div>
                 
@@ -154,15 +210,15 @@
                 </div>
 
                 <div class="diary-text">
-                    昨晚是平安夜，但我一點也感覺不到平安。幾年前，我和家人匆匆逃離內地來到香港，只能用廢棄的木板和鐵皮，在石硤尾的山邊搭了一間簡陋的「寮屋」棲身。昨晚那把火光沖天，把我們辛苦建立的家燒成了灰燼。看著滿地灰燼，我不知道未來的日子該怎麼過……
+                    昨晚是平安夜，但我一點也感覺不到平安。隨著越來越多人湧入香港，我們只能用廢棄的木板和鐵皮，在石硤尾的山邊搭了一間簡陋的「寮屋」棲身。昨晚那把火光沖天，把我們辛苦建立的家燒成了灰燼。看著滿地灰燼，我不知道未來的日子該怎麼過……
                 </div>
                 
                 <div class="chain-step active" id="step-1-1">
                     <div class="question-box">
-                        <h4>第一層推論：為什麼當時香港山邊會佈滿這麼多危險、極易發生火災的「寮屋」？</h4>
+                        <h4>第一層推論：回顧上一頁，為什麼當時香港山邊會佈滿這麼多危險、極易發生火災的「寮屋」？</h4>
                         <div class="opt-grid">
                             <button class="opt-btn" onclick="handleLogic(this, 'step-1-1', false)">A. 港府當時推廣「親近自然」的居住模式，鼓勵市民上山搭建木屋。</button>
-                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-1', true, 'step-1-2', '沒錯！1946年起因內地爆發國共內戰及政局動盪，大量難民南移香港，房屋嚴重供不應求。')">B. 因內地政局動盪及戰亂，大量人口湧入香港，衍生嚴重的住屋短缺。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-1', true, 'step-1-2', '沒錯！正是因為內地政局動盪及戰亂，大量難民南移，導致房屋嚴重供不應求。')">B. 因內地政局動盪及戰亂，大量人口湧入香港，衍生嚴重的住屋短缺。</button>
                         </div>
                         <div class="step-feedback"></div>
                     </div>
@@ -172,7 +228,7 @@
                     <div class="question-box">
                         <h4>第二層推論：面對五萬災民露宿街頭，這場災難促使港府推出了什麼顛覆性的政策？</h4>
                         <div class="opt-grid">
-                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-2', true, 'step-1-3', '正確！港府隨後興建了多層的「徙置大廈」，這標誌著香港「公共房屋」政策的正式開端。')">A. 開展「公共房屋」政策，興建徙置大廈安置災民。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-2', true, 'step-1-3', '正確！港府隨後興建了多層的「徙置大廈」，並在日後發展出「十年建屋計劃」，這標誌著香港「公共房屋」政策的正式開端。')">A. 開展「公共房屋」政策，興建徙置大廈安置災民。</button>
                             <button class="opt-btn" onclick="handleLogic(this, 'step-1-2', false)">B. 實施「即捕即解」政策，把災民全部遣返內地。</button>
                         </div>
                         <div class="step-feedback"></div>
@@ -212,7 +268,7 @@
                 </div>
 
                 <div class="diary-text">
-                    為了填飽肚子，我妹才十歲就在家裡幫忙穿膠花，而我則在深水埗的一間「山寨廠」打工。報紙上天天都是招聘廣告。大家都以為50年代初香港要完蛋了，沒想到那些上海老闆帶來的機器，加上我們這些廉價勞工，竟然硬生生闖出一條新路……
+                    為了填飽肚子，我妹才十歲就在家裡幫忙穿膠花，而我則在深水埗的一間「山寨廠」打工。報紙上天天都是招聘廣告。大家都以為50年代初香港要完蛋了，沒想到那些上海老闆帶來的資金和技術，加上我們這些廉價勞工，竟然硬生生闖出一條新路……
                 </div>
 
                 <div class="chain-step active" id="step-2-1">
@@ -220,7 +276,7 @@
                         <h4>深層邏輯：阿明提到「大家都以為50年代初香港要完蛋了」。當時香港原本依賴的「轉口貿易」為何會突然中斷，迫使香港轉型發展工業？</h4>
                         <div class="opt-grid">
                             <button class="opt-btn" onclick="handleLogic(this, 'step-2-1', false)">A. 因為周邊國家發現了新航線，商船不再途經香港。</button>
-                            <button class="opt-btn" onclick="handleLogic(this, 'step-2-1', true, 'step-2-photos', '正確！韓戰爆發後，聯合國對華實施禁運，香港轉口港地位受重創，只能轉型為「加工製造業」求存。')">B. 韓戰爆發，聯合國對中國內地實施物資禁運。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-2-1', true, 'step-2-photos', '正確！1950年韓戰爆發，聯合國對中國實行禁運，香港轉口港地位受重創，只能轉型為「加工製造業」求存。')">B. 韓戰爆發，聯合國對中國內地實行物資禁運。</button>
                         </div>
                         <div class="step-feedback"></div>
                     </div>
@@ -279,7 +335,7 @@
                         <h4>推論一：面對極度缺水的生存危機，港府最終與內地達成了什麼大型供水工程？</h4>
                         <div class="opt-grid">
                             <button class="opt-btn" onclick="handleLogic(this, 'step-3-1', false)">A. 每日用巨型貨船從外國運載淡水來港。</button>
-                            <button class="opt-btn" onclick="handleLogic(this, 'step-3-1', true, 'step-3-2', '正確！落實「東江水供水計劃」，東江水自此成為香港食水供應的最主要來源。')">B. 落實「東江水供水計劃」，由內地引水到港。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-3-1', true, 'step-3-2', '正確！1965年落實「東江供水計劃」，東江水自此成為香港食水供應的最主要來源。')">B. 落實「東江供水計劃」，由內地引水到港。</button>
                         </div>
                         <div class="step-feedback"></div>
                     </div>
@@ -290,7 +346,7 @@
                         <div class="img-frame" style="max-width: 400px;"><img src="express_train_pigs.jpg" alt="三趟快車" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'150\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'16\' fill=\'%23999\' text-anchor=\'middle\'%3E[圖片載入處: express_train_pigs.jpg]%3C/text%3E%3C/svg%3E'"></div>
                         <h4>推論二：除了食水，人口暴增的香港還需要龐大的食物。內地如何穩定供應新鮮食品給香港？</h4>
                         <div class="opt-grid">
-                            <button class="opt-btn" onclick="handleLogic(this, 'step-3-2', true, 'step-3-stamp', '沒錯！內地開通了被稱為「三趟快車」的專列，每日將活豬、活牛、家禽等新鮮肉食運抵香港。')">A. 開通鐵路專列「三趟快車」，每日運送活鮮食品到港。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-3-2', true, 'step-3-stamp', '沒錯！內地開通了被稱為「三趟快車」的專列，每日將活豬、活牛、活家禽等新鮮肉食運抵香港。')">A. 開通鐵路專列「三趟快車」，每日運送新鮮肉食到港。</button>
                             <button class="opt-btn" onclick="handleLogic(this, 'step-3-2', false)">B. 鼓勵市民在天台自行養豬種菜。</button>
                         </div>
                         <div class="step-feedback"></div>
@@ -321,15 +377,15 @@
                 <div class="img-frame"><img src="bomb_warning_1967.jpg" alt="土製炸彈警告" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'200\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%23999\'%3E[圖片載入處: bomb_warning_1967.jpg]%3C/text%3E%3C/svg%3E'"></div>
 
                 <div class="diary-text">
-                    街上瀰漫著催淚彈的氣味。由最初新蒲崗塑膠花廠的勞資糾紛，演變成現在滿街都是「土製炸彈」的恐怖局面。政府實施了宵禁，每天聽收音機都播報著無辜市民死傷的消息。民怨加上內地的政治狂潮，徹底點燃了這個火藥桶。
+                    街上瀰漫著催淚彈的氣味。由最初新蒲崗人造花廠的勞資糾紛，演變成現在滿街都是「土製炸彈」的恐怖局面。政府實施了宵禁，每天聽收音機都播報著無辜市民死傷的消息。民怨加上內地的政治狂潮，徹底點燃了這個火藥桶。
                 </div>
 
                 <div class="chain-step active" id="step-4-1">
                     <div class="question-box">
                         <h4>推論一：「六七暴動」的爆發絕非偶然。請點擊找出導致這場暴動的「內部」與「外部」因素。<br><span style="color:var(--text-light); font-size:0.95rem;">（提示：必須點選出<strong>所有</strong>相關因素，還原事件全貌）</span></h4>
                         <div class="opt-grid">
-                            <button class="opt-btn" id="riot-a" onclick="handleDualLogic(this, 'A')">A. 內部：港府福利政策不足，物價上升，勞資糾紛極易引發強烈民怨。</button>
-                            <button class="opt-btn" id="riot-b" onclick="handleDualLogic(this, 'B')">B. 外部：內地正爆發「文化大革命」，極左的反帝國主義思想蔓延至香港。</button>
+                            <button class="opt-btn" id="riot-a" onclick="handleDualLogic(this, 'A')">A. 內部：港府福利政策不足，物價上升（如天星小輪加價），導致市民不滿情緒累積。</button>
+                            <button class="opt-btn" id="riot-b" onclick="handleDualLogic(this, 'B')">B. 外部：內地正爆發「文化大革命」，引發港澳受極左思想影響，出現反殖民、反帝國主義的想法。</button>
                         </div>
                         <div class="step-feedback" id="riot-feedback"></div>
                     </div>
@@ -363,10 +419,11 @@
                 
                 <div class="quiz-container">
                     <div class="quiz-text-area">
-                        二戰後，1946年起因內地爆發 <span class="blank-slot" data-ans="內戰"></span> 及政局動盪，大量人口為逃避戰亂湧入香港。他們多居於山邊的 <span class="blank-slot" data-ans="寮屋"></span>。1953年 <span class="blank-slot" data-ans="石硤尾"></span> 大火後，港府正式開展了 <span class="blank-slot" data-ans="公共房屋"></span> 政策，促成獅子山精神的萌芽。<br><br>
-                        經濟方面，因韓戰導致聯合國對華實施 <span class="blank-slot" data-ans="禁運"></span>，打擊了香港轉口貿易。但內地移民帶來了資金和廉價 <span class="blank-slot" data-ans="勞動力"></span>，促使香港發展製造業，「 <span class="blank-slot" data-ans="山寨廠"></span> 」林立，帶動經濟轉型起飛。<br><br>
-                        資源方面，因大旱導致1960年代實施嚴格的 <span class="blank-slot" data-ans="制水"></span>。其後由內地供應 <span class="blank-slot" data-ans="東江水"></span> 解決危機；內地亦開通「 <span class="blank-slot" data-ans="三趟快車"></span> 」穩定供應活鮮食物。<br><br>
-                        社會方面，港府福利不足引發民怨，加上受內地 <span class="blank-slot" data-ans="文化大革命"></span> 思潮影響，1967年爆發了嚴重的 <span class="blank-slot" data-ans="六七暴動"></span>，促使港府其後推動各項社會改革。
+                        二戰後，1946年起因內地爆發 <span class="blank-slot" data-ans="內戰"></span> 及政局動盪，大量人口為逃避戰亂南移。1950至60年代更因政治運動及天災引發 <span class="blank-slot" data-ans="偷渡"></span> 潮。港府曾實施「 <span class="blank-slot" data-ans="抵壘政策"></span> 」意圖遏止但無效，終改為「即捕即解」。<br><br>
+                        新移民多居於山邊的 <span class="blank-slot" data-ans="寮屋"></span>。1953年 <span class="blank-slot" data-ans="石硤尾"></span> 大火後，港府正式開展了 <span class="blank-slot" data-ans="公共房屋"></span> 政策。<br><br>
+                        經濟方面，因韓戰導致聯合國對中國實行 <span class="blank-slot" data-ans="禁運"></span>，打擊了轉口貿易。但內地移民帶來了資金和廉價 <span class="blank-slot" data-ans="勞動力"></span>，促使香港發展製造業，「 <span class="blank-slot" data-ans="山寨廠"></span> 」林立。<br><br>
+                        資源方面，因大旱實施 <span class="blank-slot" data-ans="制水"></span>，其後由內地供應 <span class="blank-slot" data-ans="東江水"></span> 解決危機；內地亦開通「 <span class="blank-slot" data-ans="三趟快車"></span> 」穩定供應活鮮食物。<br><br>
+                        社會方面，港府福利不足引發民怨，加上受內地 <span class="blank-slot" data-ans="文化大革命"></span> 思潮影響，1967年爆發了嚴重的 <span class="blank-slot" data-ans="六七暴動"></span>。
                     </div>
 
                     <div class="quiz-bank-area">
@@ -392,9 +449,13 @@
         }
 
         function scrollToQuiz() {
-            ['sec-economy', 'sec-resources', 'sec-riots', 'sec-quiz'].forEach(id => {
-                document.getElementById(id).classList.remove('locked');
-                document.getElementById(id).classList.add('visible');
+            // 一鍵解鎖所有章節
+            ['sec-intro', 'sec-economy', 'sec-resources', 'sec-riots', 'sec-quiz'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    el.classList.remove('locked');
+                    el.classList.add('visible');
+                }
             });
             setTimeout(() => {
                 document.getElementById('sec-quiz').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -493,8 +554,9 @@
             }
         }
 
-        const answers = ["內戰", "寮屋", "石硤尾", "公共房屋", "禁運", "勞動力", "山寨廠", "制水", "東江水", "三趟快車", "文化大革命", "六七暴動"];
-        const distractors = ["淘金", "遣返政策", "進口貿易", "高科技", "海水化淡", "五四運動"];
+        // 新增了「偷渡」與「抵壘政策」等詞彙配合第一頁內容
+        const answers = ["內戰", "偷渡", "抵壘政策", "寮屋", "石硤尾", "公共房屋", "禁運", "勞動力", "山寨廠", "制水", "東江水", "三趟快車", "文化大革命", "六七暴動"];
+        const distractors = ["淘金", "輸入外勞", "進口貿易", "高科技", "海水化淡", "五四運動"];
         let allWords = [...answers, ...distractors];
 
         function shuffle(array) {
@@ -569,7 +631,7 @@
                 resultBox.classList.add('result-perfect');
                 title = "🏆 歷史見證人";
                 msg = "太完美了！你精準填補了所有歷史記憶，對建國以來香港的變遷瞭如指掌！";
-            } else if (correctCount >= 8) {
+            } else if (correctCount >= 10) {
                 resultBox.classList.add('result-good');
                 title = "🏅 時代觀察家";
                 msg = `表現不錯！你答對了 ${correctCount} / ${total} 題。標紅的空格點擊可退回重試。`;
