@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿明的歲月筆記 - 港城變遷與歷史見證</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&family=Zhi+Mang+Xing&display=swap');
+
+        :root {
+            --bg-color: #F2EBE1; 
+            --text-main: #3E3832; 
+            --text-light: #6B6255;
+            --accent-blue: #2A4B6B; 
+            --accent-blue-hover: #1D354C;
+            --accent-red: #A33B2E; 
+            --accent-red-hover: #822F24;
+            --glass-bg: rgba(250, 246, 238, 0.95);
+            --glass-border: rgba(163, 59, 46, 0.2);
+            --shadow: 0 10px 30px rgba(42, 75, 107, 0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans TC', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; line-height: 1.8; 
+               background-image: radial-gradient(#d5cbb8 1px, transparent 1px); background-size: 20px 20px; }
+
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 15px 40px; display: flex;
+            justify-content: space-between; align-items: center; background: rgba(242, 235, 225, 0.95);
+            backdrop-filter: blur(5px); z-index: 100; border-bottom: 2px solid var(--accent-blue);
+        }
+        .logo { font-family: 'Noto Serif TC', serif; font-weight: 700; font-size: 1.4rem; color: var(--accent-blue); letter-spacing: 2px;}
+        .nav-btn { background: var(--accent-blue); color: #F2EBE1; border: none; padding: 8px 24px; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .nav-btn:hover { background: var(--accent-blue-hover); transform: translateY(-2px); }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 100px 20px 60px; }
+        .section { margin-bottom: 60px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .section.visible { opacity: 1; transform: translateY(0); }
+        .section.locked { display: none; }
+
+        h1, h2, h3 { font-family: 'Noto Serif TC', serif; }
+        h1 { font-size: 2.5rem; color: var(--accent-blue); text-align: center; margin-bottom: 10px; }
+        h1 span { color: var(--accent-red); font-family: 'Zhi Mang Xing', cursive; font-size: 3.5rem; display: inline-block; transform: translateY(5px); margin-left: 10px;}
+        
+        /* 日記本與新增文物樣式 */
+        .diary-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 8px; padding: 40px; box-shadow: var(--shadow); position: relative; margin-top: 20px; }
+        .diary-card::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: rgba(163, 59, 46, 0.3); }
+        .diary-date { font-family: 'Zhi Mang Xing', cursive; font-size: 2rem; color: var(--accent-blue); margin-bottom: 15px; border-bottom: 1px solid rgba(42, 75, 107, 0.2); padding-bottom: 5px; }
+        .diary-text { font-size: 1.15rem; color: var(--text-main); margin-bottom: 25px; text-indent: 2em; line-height: 2; font-family: 'Noto Serif TC', serif; }
+
+        /* 新增：圖片與文物展示框 */
+        .img-frame { width: 100%; max-width: 600px; margin: 0 auto 20px; border: 8px solid #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transform: rotate(-1deg); }
+        .img-frame img { width: 100%; display: block; height: auto; }
+        .artifact { background: #fffdf2; border: 1px solid #ddd; padding: 15px; margin: 20px 0; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); font-family: 'Noto Serif TC', serif; }
+        .news-header { border-bottom: 2px solid #000; text-align: center; font-weight: bold; font-size: 1.4rem; margin-bottom: 10px; color: #000; }
+        .ad-box { border: 2px dashed #555; padding: 15px; background: #fff; text-align: center; }
+
+        /* 推導邏輯鏈 */
+        .chain-step { border-left: 3px solid var(--accent-blue); padding-left: 25px; margin-top: 30px; margin-bottom: 30px; position: relative; display: none; animation: slideIn 0.5s ease forwards; margin-left: 20px; }
+        .chain-step.active { display: block; }
+        .chain-step::before { content: ''; position: absolute; left: -11px; top: 5px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg-color); border: 3px solid var(--accent-blue); }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+
+        .question-box { background: rgba(42, 75, 107, 0.05); padding: 20px; border-radius: 8px; margin: 15px 0; border: 1px solid rgba(42, 75, 107, 0.1); }
+        .question-box h4 { font-size: 1.15rem; color: var(--accent-blue); margin-bottom: 15px; }
+
+        .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .opt-btn { background: white; border: 1px solid #CCC; padding: 15px 20px; border-radius: 8px; font-size: 1.1rem; color: var(--text-main); cursor: pointer; transition: all 0.2s; text-align: left; line-height: 1.4; }
+        .opt-btn:hover { border-color: var(--accent-blue); background: rgba(42, 75, 107, 0.05); }
+        .opt-btn.correct { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+        .opt-btn.wrong { background: #9E9E9E; color: white; border-color: #9E9E9E; opacity: 0.8; }
+        .opt-btn:disabled { cursor: not-allowed; }
+
+        .step-feedback { margin-top: 15px; font-size: 1.05rem; display: none; padding: 12px; border-radius: 4px; }
+        .step-feedback.show-correct { display: block; background: rgba(42, 75, 107, 0.1); color: var(--accent-blue-hover); border-left: 4px solid var(--accent-blue); }
+        .step-feedback.show-wrong { display: block; background: rgba(163, 59, 46, 0.1); color: var(--accent-red); border-left: 4px solid var(--accent-red); }
+
+        .unlock-container { text-align: center; margin-top: 30px; display: none; animation: slideIn 0.5s ease forwards; }
+        .next-section-btn { display: inline-block; padding: 12px 30px; background: var(--accent-red); color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s; font-family: 'Noto Serif TC', serif; font-weight: bold; }
+        .next-section-btn:hover { background: var(--accent-red-hover); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(163, 59, 46, 0.3); }
+
+        /* 老照片卡片 */
+        .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; padding-left: 20px;}
+        .photo-card { background: #FFF; padding: 15px 15px 25px 15px; border: 1px solid #ddd; box-shadow: 2px 4px 10px rgba(0,0,0,0.1); transform: rotate(-2deg); transition: all 0.3s ease; cursor: pointer; text-align: center; position: relative; }
+        .photo-card:nth-child(even) { transform: rotate(2deg); }
+        .photo-card:hover { transform: scale(1.05) rotate(0deg); z-index: 10; box-shadow: 5px 10px 20px rgba(0,0,0,0.15); }
+        .photo-card .img-placeholder { height: 120px; background: #eee; border: 1px dashed #ccc; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #999; }
+        .photo-card p.caption { font-family: 'Zhi Mang Xing', cursive; font-size: 1.4rem; color: var(--text-main); margin: 0; }
+        .photo-card .back-desc { display: none; margin-top: 10px; font-size: 0.95rem; text-align: left; color: var(--accent-blue); border-top: 1px dashed #ccc; padding-top: 10px; }
+        .photo-card.revealed .back-desc { display: block; animation: slideIn 0.3s ease; }
+        .photo-card.revealed .img-placeholder { opacity: 0.3; height: 60px; transition: 0.3s; }
+
+        /* 新增：蓋章遊戲 */
+        .stamp-game { text-align: center; border: 2px dashed var(--accent-red); padding: 20px; background: rgba(163, 59, 46, 0.05); border-radius: 8px; margin-top: 20px; }
+        .pig-item { font-size: 3.5rem; display: inline-block; position: relative; margin: 10px 20px; cursor: pointer; transition: transform 0.2s; }
+        .pig-item:hover { transform: scale(1.1); }
+        .seal-mark { position: absolute; top: 10px; left: -10px; color: var(--accent-red); font-size: 1.8rem; font-family: 'Zhi Mang Xing', cursive; transform: rotate(-20px); font-weight: bold; opacity: 0; pointer-events: none; border: 3px solid var(--accent-red); border-radius: 5px; padding: 2px 5px; }
+        .seal-mark.stamped { opacity: 0.85; animation: stampDown 0.3s ease-in; }
+        @keyframes stampDown { 0% { transform: scale(3) rotate(0deg); opacity: 0; } 100% { transform: scale(1) rotate(-20px); opacity: 0.85; } }
+
+        /* 新增：炸彈警示 */
+        .bomb-box { background: #2c3e50; color: #fff; padding: 30px; text-align: center; border-radius: 8px; position: relative; margin-top: 20px; border: 4px solid #34495e; }
+        .bomb-text { color: #e74c3c; font-family: 'Zhi Mang Xing', cursive; font-size: 2.5rem; border: 3px solid #e74c3c; padding: 10px 20px; display: inline-block; margin-bottom: 20px; background: #fff; letter-spacing: 5px; }
+        .bomb-btn { padding: 12px 20px; border: none; border-radius: 4px; font-size: 1.1rem; cursor: pointer; font-weight: bold; margin: 10px; transition: 0.3s; }
+        .bomb-danger { background: #e74c3c; color: white; }
+        .bomb-danger:hover { background: #c0392b; }
+        .bomb-safe { background: #95a5a6; color: white; }
+        .bomb-safe:hover { background: #7f8c8d; }
+
+        /* 小測系統 (沿用) */
+        .quiz-container { display: flex; gap: 30px; align-items: flex-start; padding-left: 20px; }
+        .quiz-text-area { flex: 2; line-height: 2.4; font-size: 1.15rem; font-family: 'Noto Serif TC', serif; }
+        .quiz-bank-area { flex: 1; position: sticky; top: 100px; background: white; padding: 20px; border-radius: 8px; box-shadow: var(--shadow); border: 1px solid var(--glass-border); }
+        .blank-slot { display: inline-block; min-width: 80px; height: 32px; padding: 0 10px; border-bottom: 2px solid var(--text-light); margin: 0 4px; text-align: center; font-weight: bold; color: var(--accent-red); background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; }
+        .blank-slot:hover { background: rgba(163, 59, 46, 0.1); border-color: var(--accent-red); }
+        .blank-slot.filled { border-bottom: 2px solid var(--accent-red); background: transparent; }
+        .blank-slot.correct { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(42, 75, 107, 0.1); }
+        .blank-slot.wrong { border-color: var(--accent-red); color: var(--accent-red); background: rgba(163, 59, 46, 0.1); }
+        .word-chip { display: inline-block; background: var(--bg-color); border: 1px solid #ccd1d1; padding: 6px 12px; margin: 5px; border-radius: 4px; cursor: pointer; font-size: 1rem; color: var(--text-main); transition: all 0.2s; }
+        .word-chip:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+        .word-chip.hidden { display: none; }
+        .submit-btn { display: block; width: 100%; margin-top: 20px; background: var(--accent-red); color: white; padding: 10px; border-radius: 4px; font-size: 1.1rem; font-weight: bold; border: none; cursor: pointer; transition: background 0.3s; }
+        .submit-btn:hover { background: var(--accent-red-hover); }
+        #quiz-result { margin-top: 25px; padding: 15px; border-radius: 4px; text-align: center; display: none; animation: slideIn 0.5s ease; }
+        .result-perfect { background: rgba(212, 175, 55, 0.15); border: 1px solid #D4AF37; color: #9A7B1E; }
+        .result-good { background: rgba(42, 75, 107, 0.1); border: 1px solid var(--accent-blue); color: var(--accent-blue); }
+        .result-pass { background: rgba(163, 59, 46, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red); }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">歲月印記</div>
+        <button class="nav-btn" onclick="scrollToQuiz()">跳至總結小測</button>
+    </nav>
+
+    <div class="container">
+        
+        <div class="section visible" id="sec-intro">
+            <h1>阿明的歲月筆記 <span>建國以來的港城變遷</span></h1>
+            
+            <div class="diary-card">
+                <div class="diary-date">1953年12月25日 星期五 晴，極冷</div>
+                
+                <div class="img-frame"><img src="news_shek_kip_mei.jpg" alt="石硤尾大火新聞圖片" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'200\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%23999\'%3E[圖片載入處: news_shek_kip_mei.jpg]%3C/text%3E%3C/svg%3E'"></div>
+                
+                <div class="artifact">
+                    <div class="news-header">《工商日報》號外：石硤尾大火</div>
+                    <p style="text-align:center;">「無情大火吞噬兩千木屋，五萬災民寒風中泣訴，政府急謀安置之策...」</p>
+                </div>
+
+                <div class="diary-text">
+                    昨晚是平安夜，但我一點也感覺不到平安。幾年前，我和家人匆匆逃離內地來到香港，只能用廢棄的木板和鐵皮，在石硤尾的山邊搭了一間簡陋的「寮屋」棲身。昨晚那把火光沖天，把我們辛苦建立的家燒成了灰燼。看著滿地灰燼，我不知道未來的日子該怎麼過……
+                </div>
+                
+                <div class="chain-step active" id="step-1-1">
+                    <div class="question-box">
+                        <h4>第一層推論：為什麼當時香港山邊會佈滿這麼多危險、極易發生火災的「寮屋」？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-1', false)">A. 港府當時推廣「親近自然」的居住模式，鼓勵市民上山搭建木屋。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-1', true, 'step-1-2', '沒錯！1946年起因內地爆發國共內戰及政局動盪，大量難民南移香港，房屋嚴重供不應求。')">B. 因內地政局動盪及戰亂，大量人口湧入香港，衍生嚴重的住屋短缺。</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="chain-step" id="step-1-2">
+                    <div class="question-box">
+                        <h4>第二層推論：面對五萬災民露宿街頭，這場災難促使港府推出了什麼顛覆性的政策？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-2', true, 'step-1-3', '正確！港府隨後興建了多層的「徙置大廈」，這標誌著香港「公共房屋」政策的正式開端。')">A. 開展「公共房屋」政策，興建徙置大廈安置災民。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-2', false)">B. 實施「即捕即解」政策，把災民全部遣返內地。</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="chain-step" id="step-1-3">
+                    <div class="question-box">
+                        <h4>第三層推論：在往後的徙置區歲月裡，這群來自五湖四海的移民在狹窄的環境中守望相助，逐漸孕育出什麼本土精神？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-3', true, 'btn-unlock-2', '完全正確！大家同舟共濟、刻苦耐勞，這種精神後來被稱為「獅子山精神」，也加強了香港人的身分認同。')">A. 同舟共濟、刻苦拼搏的「獅子山精神」。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-1-3', false)">B. 自掃門前雪、互不相干的「個人主義」。</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="unlock-container" id="btn-unlock-2">
+                    <button class="next-section-btn" onclick="unlockSection('sec-economy')">翻開下一頁：工業起飛 (1960年代) ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section locked" id="sec-economy">
+            <div class="diary-card">
+                <div class="diary-date">1968年8月10日 星期六 悶熱</div>
+                
+                <div class="img-frame"><img src="factory_ad_1960s.jpg" alt="山寨廠招聘廣告" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'200\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%23999\'%3E[圖片載入處: factory_ad_1960s.jpg]%3C/text%3E%3C/svg%3E'"></div>
+
+                <div class="artifact">
+                    <div class="ad-box">
+                        <strong>【誠聘】山寨廠熟手/學徒</strong><br>
+                        急聘塑膠花裝配女工、五金車床男工多名。<br>
+                        眼明手快，多勞多得。包午膳。<br>
+                        <span style="font-size:0.9rem; color:#666;">地址：深水埗大南街閣樓</span>
+                    </div>
+                </div>
+
+                <div class="diary-text">
+                    為了填飽肚子，我妹才十歲就在家裡幫忙穿膠花，而我則在深水埗的一間「山寨廠」打工。報紙上天天都是招聘廣告。大家都以為50年代初香港要完蛋了，沒想到那些上海老闆帶來的機器，加上我們這些廉價勞工，竟然硬生生闖出一條新路……
+                </div>
+
+                <div class="chain-step active" id="step-2-1">
+                    <div class="question-box">
+                        <h4>深層邏輯：阿明提到「大家都以為50年代初香港要完蛋了」。當時香港原本依賴的「轉口貿易」為何會突然中斷，迫使香港轉型發展工業？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-2-1', false)">A. 因為周邊國家發現了新航線，商船不再途經香港。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-2-1', true, 'step-2-photos', '正確！韓戰爆發後，聯合國對華實施禁運，香港轉口港地位受重創，只能轉型為「加工製造業」求存。')">B. 韓戰爆發，聯合國對中國內地實施物資禁運。</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="chain-step" id="step-2-photos" style="border-left-color: transparent; margin-left: 0; padding-left: 0; animation: none;">
+                    <p style="color: var(--accent-red); font-weight: bold; margin-bottom: 10px; padding-left: 20px;">【點擊下方阿明的舊照片，看看當年山寨廠發展出哪三大輕工業：】</p>
+                    <div class="photo-grid">
+                        <div class="photo-card" onclick="revealPhoto(this)">
+                            <div class="img-placeholder">📸 紡織廠照片</div>
+                            <p class="caption">「軋軋」聲的青春</p>
+                            <div class="back-desc"><strong>紡織及製衣業：</strong> 內地企業家帶來資金和技術，配合大量廉價勞動力，讓香港紡織業蓬勃發展。</div>
+                        </div>
+                        <div class="photo-card" onclick="revealPhoto(this)">
+                            <div class="img-placeholder">📸 裝嵌鐘錶照片</div>
+                            <p class="caption">與時間競賽</p>
+                            <div class="back-desc"><strong>鐘錶業：</strong> 在狹窄的山寨廠內，工人憑著靈巧的雙手進行精密裝嵌，產品出口全球。</div>
+                        </div>
+                        <div class="photo-card" onclick="revealPhoto(this)">
+                            <div class="img-placeholder">📸 穿膠花照片</div>
+                            <p class="caption">為世界製造快樂</p>
+                            <div class="back-desc"><strong>玩具及塑膠業：</strong> 從穿膠花到鐵皮玩具，香港成為了世界知名的玩具生產中心。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unlock-container" id="btn-unlock-3">
+                    <button class="next-section-btn" onclick="unlockSection('sec-resources')">翻開下一頁：命脈相連 (水與糧) ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section locked" id="sec-resources">
+            <div class="diary-card">
+                <div class="diary-date">1963年6月2日 星期日 酷熱無雨</div>
+                
+                <div class="img-frame"><img src="water_notice_1963.jpg" alt="制水告示" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'200\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%23999\'%3E[圖片載入處: water_notice_1963.jpg]%3C/text%3E%3C/svg%3E'"></div>
+
+                <div class="artifact" style="background: #e3f2fd; border-color: #2196f3;">
+                    <strong>【港府重要告示：1963】</strong><br>
+                    由於天旱持續，本港食水庫存告急。即日起實施「四天供水四小時」制水措施。請市民於指定街喉輪候，並節約用水。
+                </div>
+
+                <div class="diary-text">
+                    今天輪到我們街喉供水，全家總動員拿著水桶下樓排隊。「樓下關水喉啊！」這句叫喊聲每天都在屋邨迴盪。人口越來越多，工廠又日夜開工，這座城市快渴死了。直到後來，來自北方的水管和火車接通了，我們才算真正安下心來。
+                </div>
+
+                <div class="chain-step active" id="step-3-1">
+                    <div class="question-box">
+                        <h4>推論一：面對極度缺水的生存危機，港府最終與內地達成了什麼大型供水工程？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-3-1', false)">A. 每日用巨型貨船從外國運載淡水來港。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-3-1', true, 'step-3-2', '正確！落實「東江水供水計劃」，東江水自此成為香港食水供應的最主要來源。')">B. 落實「東江水供水計劃」，由內地引水到港。</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="chain-step" id="step-3-2">
+                    <div class="question-box">
+                        <div class="img-frame" style="max-width: 400px;"><img src="express_train_pigs.jpg" alt="三趟快車" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'150\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'16\' fill=\'%23999\' text-anchor=\'middle\'%3E[圖片載入處: express_train_pigs.jpg]%3C/text%3E%3C/svg%3E'"></div>
+                        <h4>推論二：除了食水，人口暴增的香港還需要龐大的食物。內地如何穩定供應新鮮食品給香港？</h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-3-2', true, 'step-3-stamp', '沒錯！內地開通了被稱為「三趟快車」的專列，每日將活豬、活牛、家禽等新鮮肉食運抵香港。')">A. 開通鐵路專列「三趟快車」，每日運送活鮮食品到港。</button>
+                            <button class="opt-btn" onclick="handleLogic(this, 'step-3-2', false)">B. 鼓勵市民在天台自行養豬種菜。</button>
+                        </div>
+                        <div class="step-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="chain-step" id="step-3-stamp">
+                    <div class="stamp-game">
+                        <h4 style="color:var(--accent-red); margin-bottom: 10px;">【歷史任務：三趟快車質量檢查】</h4>
+                        <p>為確保香港市民的食品安全，身為檢查員的你，請點擊下方的活豬/活牛，為牠們蓋上「合格」印章，准許進港！</p>
+                        <div class="pig-item" onclick="stampPig(this)">🐖 <div class="seal-mark">合格進港</div></div>
+                        <div class="pig-item" onclick="stampPig(this)">🐄 <div class="seal-mark">合格進港</div></div>
+                        <div class="pig-item" onclick="stampPig(this)">🐖 <div class="seal-mark">合格進港</div></div>
+                        <p id="stamp-msg" style="display:none; color:var(--accent-red); font-weight:bold; margin-top:15px;">✔ 檢查完畢！優質物資已順利運入香港市場，穩定了社會民生。</p>
+                    </div>
+                </div>
+
+                <div class="unlock-container" id="btn-unlock-4">
+                    <button class="next-section-btn" onclick="unlockSection('sec-riots')">翻開最沉重的一頁：動盪歲月 ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section locked" id="sec-riots">
+            <div class="diary-card">
+                <div class="diary-date">1967年8月 星期四 局勢動盪</div>
+                
+                <div class="img-frame"><img src="bomb_warning_1967.jpg" alt="土製炸彈警告" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'200\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23eee\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'20\' fill=\'%23999\'%3E[圖片載入處: bomb_warning_1967.jpg]%3C/text%3E%3C/svg%3E'"></div>
+
+                <div class="diary-text">
+                    街上瀰漫著催淚彈的氣味。由最初新蒲崗塑膠花廠的勞資糾紛，演變成現在滿街都是「土製炸彈」的恐怖局面。政府實施了宵禁，每天聽收音機都播報著無辜市民死傷的消息。民怨加上內地的政治狂潮，徹底點燃了這個火藥桶。
+                </div>
+
+                <div class="chain-step active" id="step-4-1">
+                    <div class="question-box">
+                        <h4>推論一：「六七暴動」的爆發絕非偶然。請點擊找出導致這場暴動的「內部」與「外部」因素。<br><span style="color:var(--text-light); font-size:0.95rem;">（提示：必須點選出<strong>所有</strong>相關因素，還原事件全貌）</span></h4>
+                        <div class="opt-grid">
+                            <button class="opt-btn" id="riot-a" onclick="handleDualLogic(this, 'A')">A. 內部：港府福利政策不足，物價上升，勞資糾紛極易引發強烈民怨。</button>
+                            <button class="opt-btn" id="riot-b" onclick="handleDualLogic(this, 'B')">B. 外部：內地正爆發「文化大革命」，極左的反帝國主義思想蔓延至香港。</button>
+                        </div>
+                        <div class="step-feedback" id="riot-feedback"></div>
+                    </div>
+                </div>
+
+                <div class="chain-step" id="step-4-bomb">
+                    <div class="bomb-box">
+                        <h4 style="color: #f1c40f; margin-bottom: 10px;">【危機情境模擬】</h4>
+                        <p>你在放工回家的路上，突然看見路邊放著一個奇怪的鞋盒，上面用紅漆寫著：</p>
+                        <div class="bomb-text">同胞勿近</div>
+                        <p style="margin-bottom: 15px;">當時很多人因為好奇或不慎觸碰這些「土製炸彈」而喪命。你該怎麼做？</p>
+                        
+                        <button class="bomb-btn bomb-danger" onclick="triggerBomb(false)">靠近打開盒子，看看裡面裝了什麼</button>
+                        <button class="bomb-btn bomb-safe" onclick="triggerBomb(true)">保持距離，迅速離開並警告其他途人</button>
+                        
+                        <div id="bomb-feedback" style="display:none; margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 5px;"></div>
+                    </div>
+                </div>
+
+                <div class="unlock-container" id="btn-unlock-5">
+                    <p style="color: var(--accent-blue); font-weight: bold; margin-bottom: 15px;">你已走過阿明的歲月，見證了香港在國情變化下的跌宕起伏。</p>
+                    <button class="next-section-btn" onclick="unlockSection('sec-quiz'); scrollToQuiz();">進入最終章：歷史總結小測 ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section locked" id="sec-quiz">
+            <div class="diary-card" style="background: white;">
+                <h2>歷史總結：拼湊港城記憶</h2>
+                <p>請從右側詞庫中點擊詞語，填入左側文章的空格中，總結建國以來內地與香港的緊密關係。</p>
+                
+                <div class="quiz-container">
+                    <div class="quiz-text-area">
+                        二戰後，1946年起因內地爆發 <span class="blank-slot" data-ans="內戰"></span> 及政局動盪，大量人口為逃避戰亂湧入香港。他們多居於山邊的 <span class="blank-slot" data-ans="寮屋"></span>。1953年 <span class="blank-slot" data-ans="石硤尾"></span> 大火後，港府正式開展了 <span class="blank-slot" data-ans="公共房屋"></span> 政策，促成獅子山精神的萌芽。<br><br>
+                        經濟方面，因韓戰導致聯合國對華實施 <span class="blank-slot" data-ans="禁運"></span>，打擊了香港轉口貿易。但內地移民帶來了資金和廉價 <span class="blank-slot" data-ans="勞動力"></span>，促使香港發展製造業，「 <span class="blank-slot" data-ans="山寨廠"></span> 」林立，帶動經濟轉型起飛。<br><br>
+                        資源方面，因大旱導致1960年代實施嚴格的 <span class="blank-slot" data-ans="制水"></span>。其後由內地供應 <span class="blank-slot" data-ans="東江水"></span> 解決危機；內地亦開通「 <span class="blank-slot" data-ans="三趟快車"></span> 」穩定供應活鮮食物。<br><br>
+                        社會方面，港府福利不足引發民怨，加上受內地 <span class="blank-slot" data-ans="文化大革命"></span> 思潮影響，1967年爆發了嚴重的 <span class="blank-slot" data-ans="六七暴動"></span>，促使港府其後推動各項社會改革。
+                    </div>
+
+                    <div class="quiz-bank-area">
+                        <h4 style="margin-bottom: 15px; color: var(--accent-red);">詞庫 (點擊填入)</h4>
+                        <div id="word-bank"></div>
+                        <button class="submit-btn" onclick="gradeQuiz()">提交批改</button>
+                        <div id="quiz-result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function unlockSection(id) {
+            const sec = document.getElementById(id);
+            sec.classList.remove('locked');
+            setTimeout(() => {
+                sec.classList.add('visible');
+                sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+        }
+
+        function scrollToQuiz() {
+            ['sec-economy', 'sec-resources', 'sec-riots', 'sec-quiz'].forEach(id => {
+                document.getElementById(id).classList.remove('locked');
+                document.getElementById(id).classList.add('visible');
+            });
+            setTimeout(() => {
+                document.getElementById('sec-quiz').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // 一般單選推論邏輯
+        function handleLogic(btn, stepId, isCorrect, nextTargetId = null, successMsg = "") {
+            const stepDiv = document.getElementById(stepId);
+            const feedback = stepDiv.querySelector('.step-feedback');
+            const buttons = stepDiv.querySelectorAll('.opt-btn');
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.className = 'step-feedback show-correct';
+                feedback.innerHTML = `<strong>✔ 記憶正確！</strong> ${successMsg}`;
+                buttons.forEach(b => b.disabled = true);
+                
+                if (nextTargetId) {
+                    const target = document.getElementById(nextTargetId);
+                    if (target) {
+                        target.classList.add('active');
+                        target.style.display = 'block'; 
+                        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+                    }
+                }
+            } else {
+                btn.classList.add('wrong');
+                feedback.className = 'step-feedback show-wrong';
+                feedback.innerHTML = `<strong>✘ 似乎記錯了：</strong> 請細閱當時的背景，重新推理。`;
+            }
+        }
+
+        // 經濟轉型卡片
+        let revealedPhotos = 0;
+        function revealPhoto(card) {
+            if(!card.classList.contains('revealed')) {
+                card.classList.add('revealed');
+                revealedPhotos++;
+                if(revealedPhotos === 3) {
+                    const unlockBtn = document.getElementById('btn-unlock-3');
+                    unlockBtn.style.display = 'block';
+                    setTimeout(() => unlockBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+                }
+            }
+        }
+
+        // 蓋章遊戲邏輯
+        let stampCount = 0;
+        function stampPig(element) {
+            const mark = element.querySelector('.seal-mark');
+            if (!mark.classList.contains('stamped')) {
+                mark.classList.add('stamped');
+                stampCount++;
+            }
+            if (stampCount === 3) {
+                document.getElementById('stamp-msg').style.display = 'block';
+                const unlockBtn = document.getElementById('btn-unlock-4');
+                unlockBtn.style.display = 'block';
+                setTimeout(() => unlockBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+            }
+        }
+
+        // 雙選邏輯 (六七暴動)
+        let riotA = false;
+        let riotB = false;
+        function handleDualLogic(btn, type) {
+            btn.classList.add('correct'); 
+            btn.disabled = true;
+            if (type === 'A') riotA = true;
+            if (type === 'B') riotB = true;
+
+            const feedback = document.getElementById('riot-feedback');
+            feedback.className = 'step-feedback show-correct';
+
+            if (riotA && riotB) {
+                feedback.innerHTML = `<strong>✔ 歷史還原！</strong> 暴動的發生是內外交織的結果。民怨的乾柴，遇上文革思潮的烈火，最終釀成悲劇。`;
+                const nextStep = document.getElementById('step-4-bomb');
+                nextStep.classList.add('active');
+                setTimeout(() => nextStep.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+            } else {
+                feedback.innerHTML = `<strong>只看到了一面...</strong> 這是其中一個核心原因。請點選另一個選項補全歷史全貌！`;
+            }
+        }
+
+        // 炸彈情境邏輯
+        function triggerBomb(isSafe) {
+            const feedback = document.getElementById('bomb-feedback');
+            feedback.style.display = 'block';
+            
+            if (!isSafe) {
+                feedback.innerHTML = `<span style="color:#e74c3c; font-size:1.2rem; font-weight:bold;">💥 砰！</span> 歷史教訓：在動盪時期，好奇心是會致命的。請重新選擇！`;
+            } else {
+                feedback.innerHTML = `<span style="color:#2ecc71; font-size:1.2rem; font-weight:bold;">✔ 正確抉擇！</span> 你保護了自己和他人。這場暴動最終被平息，也促使港府開始檢討施政，改善民生。`;
+                const buttons = document.querySelectorAll('.bomb-btn');
+                buttons.forEach(b => b.disabled = true);
+                
+                const unlockBtn = document.getElementById('btn-unlock-5');
+                unlockBtn.style.display = 'block';
+                setTimeout(() => unlockBtn.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+            }
+        }
+
+        // 小測系統
+        const answers = ["內戰", "寮屋", "石硤尾", "公共房屋", "禁運", "勞動力", "山寨廠", "制水", "東江水", "三趟快車", "文化大革命", "六七暴動"];
+        const distractors = ["淘金", "遣返政策", "進口貿易", "高科技", "海水化淡", "五四運動"];
+        let allWords = [...answers, ...distractors];
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        const wordBank = document.getElementById('word-bank');
+        const slots = document.querySelectorAll('.blank-slot');
+
+        function initQuiz() {
+            allWords = shuffle(allWords);
+            allWords.forEach((word, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'word-chip';
+                btn.innerText = word;
+                btn.id = 'chip-' + index;
+                btn.onclick = () => fillSlot(btn);
+                wordBank.appendChild(btn);
+            });
+            slots.forEach(slot => slot.onclick = () => returnWord(slot));
+        }
+
+        function fillSlot(chipBtn) {
+            const emptySlot = Array.from(slots).find(slot => !slot.innerText);
+            if (emptySlot) {
+                emptySlot.innerText = chipBtn.innerText;
+                emptySlot.dataset.chipId = chipBtn.id;
+                emptySlot.classList.add('filled');
+                emptySlot.classList.remove('correct', 'wrong');
+                chipBtn.classList.add('hidden');
+            }
+        }
+
+        function returnWord(slot) {
+            if (slot.innerText) {
+                const chipId = slot.dataset.chipId;
+                if (chipId) {
+                    const chipBtn = document.getElementById(chipId);
+                    if (chipBtn) chipBtn.classList.remove('hidden');
+                }
+                slot.innerText = '';
+                delete slot.dataset.chipId;
+                slot.classList.remove('filled', 'correct', 'wrong');
+            }
+        }
+
+        function gradeQuiz() {
+            let correctCount = 0;
+            let total = slots.length;
+
+            slots.forEach(slot => {
+                if(slot.innerText === slot.dataset.ans) {
+                    slot.classList.remove('wrong');
+                    slot.classList.add('correct');
+                    correctCount++;
+                } else {
+                    slot.classList.remove('correct');
+                    if(slot.innerText !== "") slot.classList.add('wrong');
+                }
+            });
+
+            const resultBox = document.getElementById('quiz-result');
+            resultBox.className = ''; 
+            let title = "";
+            let msg = "";
+
+            if (correctCount === total) {
+                resultBox.classList.add('result-perfect');
+                title = "🏆 歷史見證人";
+                msg = "太完美了！你精準填補了所有歷史記憶，對建國以來香港的變遷瞭如指掌！";
+            } else if (correctCount >= 8) {
+                resultBox.classList.add('result-good');
+                title = "🏅 時代觀察家";
+                msg = `表現不錯！你答對了 ${correctCount} / ${total} 題。標紅的空格點擊可退回重試。`;
+            } else {
+                resultBox.classList.add('result-pass');
+                title = "📜 街坊小市民";
+                msg = `你答對了 ${correctCount} / ${total} 題，有些記憶已經模糊了。點擊紅色空格重新選擇吧！`;
+            }
+
+            resultBox.innerHTML = `<h3>${title}</h3><p>${msg}</p>`;
+            resultBox.style.display = 'block';
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
